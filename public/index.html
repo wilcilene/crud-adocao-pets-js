@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adocao de Pets &mdash; CRUD Didatico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <span class="tag">Node.js</span>
+      <span class="tag">Express</span>
+      <span class="tag">MySQL</span>
+      <span class="tag">fetch API</span>
+    </div>
+    <h1>&#128062; Cadastro de Adotantes de Pets</h1>
+    <p>Gerencie os humanos interessados em adotar um pet. Todas as operacoes (criar, listar, editar e remover) sao realizadas via <code>fetch()</code> para a API REST em <code>/api/humans</code>.</p>
+    <nav>
+      <a href="#formulario">Formulario</a>
+      <a href="#lista">Lista</a>
+      <a href="#sobre-api">API</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+
+    <!-- FORMULARIO CRUD -->
+    <article class="card" id="formulario">
+      <h2 id="form-titulo">&#43; Novo Cadastro</h2>
+      <p id="form-subtitulo" style="margin:0 0 1rem; color:var(--muted); font-size:0.9rem;">
+        Preencha os dados abaixo e clique em <strong>Salvar</strong>.
+      </p>
+
+      <!-- Notificacao de feedback -->
+      <div id="notificacao" class="notificacao" role="alert"></div>
+
+      <form id="human-form" novalidate>
+        <input type="hidden" id="human-id" />
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="nome">Nome completo *</label>
+            <input type="text" id="nome" placeholder="Ex.: Ana Paula Silva" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input type="email" id="email" placeholder="ana@exemplo.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" id="telefone" placeholder="(47) 99999-0000" />
+          </div>
+
+          <div class="form-group">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" placeholder="Ex.: Joinville" />
+          </div>
+
+          <div class="form-group">
+            <label for="tipo_residencia">Tipo de residencia</label>
+            <select id="tipo_residencia">
+              <option value="casa">Casa</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="chacara">Chacara</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="experiencia_com_pets" />
+            <label for="experiencia_com_pets">Ja teve ou tem pets?</label>
+          </div>
+
+          <div class="form-group full">
+            <label for="preferencias">Preferencias de pet</label>
+            <input type="text" id="preferencias" placeholder="Ex.: caes pequenos, gatos adultos" />
+          </div>
+
+          <div class="form-group full">
+            <label for="observacoes">Observacoes</label>
+            <textarea id="observacoes" placeholder="Informacoes adicionais sobre o adotante..."></textarea>
+          </div>
+
+        </div><!-- /form-grid -->
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-salvar">Salvar</button>
+          <button type="button" class="btn btn-ghost" id="btn-cancelar" style="display:none;">Cancelar edicao</button>
+        </div>
+      </form>
+    </article>
+
+    <!-- LISTA DE REGISTROS -->
+    <article class="card" id="lista">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+        <h2 style="margin:0; border:none; padding:0;">Lista de Adotantes</h2>
+        <button class="btn btn-ghost" id="btn-recarregar">&#8635; Atualizar</button>
+      </div>
+      <p style="color:var(--muted); font-size:.88rem; margin:.5rem 0 1rem;">Clique em <strong>Editar</strong> para carregar o registro no formulario acima.</p>
+
+      <div class="table-wrapper">
+        <table id="humans-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Cidade</th>
+              <th>Residencia</th>
+              <th>Experiencia</th>
+              <th>Cadastro</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody id="humans-tbody">
+            <!-- preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </article>
+
+    <!-- SOBRE A API -->
+    <article class="card" id="sobre-api">
+      <h2>Como funciona a API</h2>
+      <p style="font-size:.93rem; color:var(--muted);">O navegador usa <code>fetch()</code> para enviar requisicoes HTTP para o servidor Express. O servidor executa a query no MySQL e devolve JSON.</p>
+      <ul class="rota-lista">
+        <li><span class="metodo get">GET</span> <code>/api/humans</code> &mdash; Lista todos os adotantes</li>
+        <li><span class="metodo get">GET</span> <code>/api/humans/:id</code> &mdash; Busca por ID</li>
+        <li><span class="metodo post">POST</span> <code>/api/humans</code> &mdash; Cria novo registro</li>
+        <li><span class="metodo put">PUT</span> <code>/api/humans/:id</code> &mdash; Atualiza registro</li>
+        <li><span class="metodo delete">DELETE</span> <code>/api/humans/:id</code> &mdash; Remove registro</li>
+      </ul>
+    </article>
+
+  </section>
+
+  <aside>
+    <div class="card">
+      <h2>Checklist do projeto</h2>
+      <ul class="check-list">
+        <li>Banco MySQL criado via <code>schema.sql</code></li>
+        <li>Conexao configurada em <code>.env</code></li>
+        <li>Servidor Node.js rodando</li>
+        <li>Formulario com validacao</li>
+        <li>CRUD completo via <code>fetch()</code></li>
+        <li>Feedback visual para o usuario</li>
+        <li>Tabela com edicao e remocao</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Fluxo de dados</h2>
+      <div class="info-box">
+        <strong>1.</strong> Usuario preenche o formulario<br/>
+        <strong>2.</strong> JS chama <code>fetch()</code><br/>
+        <strong>3.</strong> Express recebe a requisicao<br/>
+        <strong>4.</strong> Controller chama o Model<br/>
+        <strong>5.</strong> Model executa o SQL<br/>
+        <strong>6.</strong> Resposta JSON retorna ao navegador<br/>
+        <strong>7.</strong> Pagina atualiza a tabela
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Tecnologias</h2>
+      <ul class="check-list">
+        <li>Node.js + Express</li>
+        <li>mysql2/promise</li>
+        <li>fetch() nativo</li>
+        <li>HTML5 + CSS3</li>
+        <li>dotenv + cors</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  Projeto didatico CRUD &mdash; Node.js, Express, MySQL e fetch() &mdash;
+  <a href="https://github.com/wilcilene/crud-adocao-pets-js" style="color:var(--primary);">Ver no GitHub</a>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
