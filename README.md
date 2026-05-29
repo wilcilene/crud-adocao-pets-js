@@ -1,8 +1,7 @@
-# 🐾 crud-adocao-pets-js
+# 🐾 crud-adocao-pets-js README.md -> criado com apoio de IA
 
 > Projeto didático de **CRUD completo** com Node.js, Express, MySQL e `fetch()` no navegador.  
 > Formulário para cadastro de humanos interessados em adotar pets — operações de **Criar, Listar, Atualizar e Remover** direto pela interface web.
-
 ---
 
 ## 📁 Estrutura do projeto
